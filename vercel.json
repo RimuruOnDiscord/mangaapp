@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/gomanga-api/:path*",
+      "destination": "https://gomanga-api.vercel.app/:path*"
+    }
+  ]
+}
