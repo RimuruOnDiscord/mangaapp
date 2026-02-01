@@ -144,6 +144,8 @@ const Browse: React.FC<BrowseProps> = ({ initialSort = 'popularity', title = "Ex
   const [safeSearch, setSafeSearch] = useState(true);
   const [hdImages, setHdImages] = useState(true);
 
+  const FORBIDDEN_GENRE_IDS = [12, 49, 9, 10, 14, 37, 38]; // Ecchi, Hentai, Yaoi, Yuri, Adult, Gore, Violence, Erotica
+
     useEffect(() => {
       const id = 'vf-ui-animations';
       if (document.getElementById(id)) return;
@@ -186,10 +188,15 @@ const Browse: React.FC<BrowseProps> = ({ initialSort = 'popularity', title = "Ex
     setPage(1);
   }, [initialSort]);
 
-  useEffect(() => {
-    fetch('https://api.jikan.moe/v4/genres/manga').then(res => res.json()).then(data => {
-      if (data.data) setGenres(data.data.slice(0, 24));
-    });
+useEffect(() => {
+    fetch('https://api.jikan.moe/v4/genres/manga')
+      .then(res => res.json())
+      .then(data => {
+        if (data.data) {
+          const cleanGenres = data.data.filter((g: Genre) => !FORBIDDEN_GENRE_IDS.includes(g.mal_id));
+          setGenres(cleanGenres.slice(0, 24));
+        }
+      });
   }, []);
 
   const buildSearchQuery = useCallback(() => {
@@ -206,21 +213,29 @@ const Browse: React.FC<BrowseProps> = ({ initialSort = 'popularity', title = "Ex
     setIsSearching(true);
     try {
       const params = new URLSearchParams();
-      const searchTerm = buildSearchQuery();
-      if (searchTerm) params.append('q', searchTerm);
+      if (searchQuery) params.append('q', searchQuery);
+      if (selectedGenre) params.append('genres', selectedGenre.toString());
+      
+      // CRITICAL: Force SFW parameter and exclude explicit ratings
+      params.append('sfw', 'true'); 
       params.append('limit', '24');
       params.append('page', pageNum.toString());
-      params.append('order_by', selectedSort); // Uses the passed initialSort logic
+      params.append('order_by', selectedSort);
       params.append('sort', 'desc');
 
       const res = await fetch(`https://api.jikan.moe/v4/manga?${params.toString()}`);
       const data = await res.json();
+      
       if (data.data) {
-        setMangaList(prev => pageNum === 1 ? data.data : [...prev, ...data.data]);
+        // Double-check check for explicit titles (secondary client-side filter)
+        const filteredData = data.data.filter((m: any) => 
+          !m.genres.some((g: any) => FORBIDDEN_GENRE_IDS.includes(g.mal_id))
+        );
+        setMangaList(prev => pageNum === 1 ? filteredData : [...prev, ...filteredData]);
         setHasMore(data.pagination.has_next_page);
       }
     } catch (e) { console.error(e); } finally { setLoading(false); setIsSearching(false); }
-  }, [buildSearchQuery, selectedSort]);
+  }, [searchQuery, selectedGenre, selectedSort]);
 
   useEffect(() => {
     setPage(1);
@@ -263,7 +278,7 @@ const Browse: React.FC<BrowseProps> = ({ initialSort = 'popularity', title = "Ex
 <CustomCursor />
 
       {/* HEADER */}
-      <header className="sticky top-0 z-[100] w-full bg-[#050505]/90 backdrop-blur-xl border-b border-white/5">
+<header className="sticky top-0 z-[100] w-full bg-[#050505]/90 backdrop-blur-xl border-b border-white/5">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-8">
             <div onClick={() => navigate('/')} className="flex items-center gap-3 cursor-pointer">
@@ -314,7 +329,7 @@ const Browse: React.FC<BrowseProps> = ({ initialSort = 'popularity', title = "Ex
           if (searchQuery) setShowSearch(true);
         }}
         onBlur={() => setTimeout(() => setShowSearch(false), 200)}
-        className="bg-[#080809] border border-white/10 rounded-xl py-2.5 pl-11 pr-12 text-[11px] font-bold tracking-wide w-[240px] md:w-[280px] focus:w-[360px] focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all duration-500 text-gray-200 placeholder:text-gray-600 uppercase"
+        className="bg-[#080809] border border-white/10 rounded-xl py-2.5 pl-11 pr-12 text-[11px] font-black tracking-widest w-[240px] md:w-[280px] focus:w-[360px] focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all duration-500 text-gray-200 focus:text-white placeholder:text-gray-600 uppercase"
         placeholder="Search..."
       />
       
