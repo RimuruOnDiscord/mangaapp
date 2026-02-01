@@ -71,11 +71,6 @@ const Manga: React.FC = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchMounted, setSearchMounted] = useState(false);
 
-  // Settings States
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [safeSearch, setSafeSearch] = useState(true);
-  const [hdImages, setHdImages] = useState(true);
-
   const sanitize = (str: string) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
 
   // Animations CSS Injection
@@ -193,9 +188,11 @@ const Manga: React.FC = () => {
               <div className="flex flex-col leading-none">
                 <div className="flex items-center gap-1.5">
                     <span className="text-xl font-[900] tracking-tighter">MANGA</span><span className="text-xl font-[900] tracking-tighter text-emerald-500">VEL</span>
-                    <span className="bg-emerald-500 text-[9px] font-black px-1.5 py-0.5 rounded-sm italic text-black -translate-y-1">v2</span>
+                    <span className="bg-emerald-500 bg-opacity-10 text-[11px] font-black px-1.5 py-0.5 rounded-sm italic text-emerald-400 -translate-y-1">v2</span>
                 </div>
-                <span className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase opacity-60">FAST • FREE • ONLINE</span>
+            <span className="text-[9.7px] font-bold text-gray-500 tracking-[0.2em] uppercase opacity-60">
+              FAST • FREE • ONLINE
+            </span>
               </div>
             </div>
 
@@ -208,105 +205,107 @@ const Manga: React.FC = () => {
             </nav>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* PRO SEARCH HUD */}
+          <div className="flex items-center gap-3">
+            {/* IMPROVED SEARCH */}
             <div className="relative group hidden sm:block">
+              {/* Outer Glow Effect on Focus */}
               <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-transparent blur-lg opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+              
               <div className="relative flex items-center">
                 <input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => searchQuery && setShowSearch(true)}
-                  onBlur={() => setTimeout(() => setShowSearch(false), 200)}
+                  onBlur={() => setTimeout(() => setShowSearch(false), 200)} // Keep dropdown open briefly
                   className="bg-[#080809] border border-white/10 rounded-xl py-2.5 pl-11 pr-12 text-[11px] font-black tracking-widest w-[240px] md:w-[280px] focus:w-[360px] focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all duration-500 text-gray-200 focus:text-white placeholder:text-gray-600 uppercase"
                   placeholder="Search..."
                 />
-                <Search className={`absolute left-4 transition-all duration-500 ${searchQuery ? 'text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'text-gray-600'}`} size={14} />
+                
+                {/* Icon with focus glow */}
+                <Search 
+                  className={`absolute left-4 transition-all duration-500 ${
+                    searchQuery ? 'text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'text-gray-600'
+                  }`} 
+                  size={14} 
+                />
+
+                {/* Dynamic Status (Loading Spinner or Clear X) */}
                 <div className="absolute right-4 flex items-center gap-2">
                   {isSearching ? (
-                    <div className="flex gap-0.5 items-end h-3">
-                      <div className="w-1 h-2 bg-emerald-500 animate-bounce-bar" style={{ animationDelay: '0ms' }} />
-                      <div className="w-1 h-3 bg-emerald-500 animate-bounce-bar" style={{ animationDelay: '150ms' }} />
-                      <div className="w-1 h-2 bg-emerald-500 animate-bounce-bar" style={{ animationDelay: '300ms' }} />
+                    <div className="flex gap-0.5">
+                      <div className="w-1 h-3 bg-emerald-500 animate-[bounce_1s_infinite_0ms]" />
+                      <div className="w-1 h-3 bg-emerald-500 animate-[bounce_1s_infinite_200ms]" />
+                      <div className="w-1 h-3 bg-emerald-500 animate-[bounce_1s_infinite_400ms]" />
                     </div>
-                  ) : searchQuery && <button onClick={() => setSearchQuery('')}><X size={14} className="text-gray-500 hover:text-emerald-500 transition-colors" /></button>}
+                  ) : searchQuery && (
+                    <button onClick={() => setSearchQuery('')} className="hover:rotate-90 transition-transform duration-300">
+                      <X size={14} className="text-gray-500 hover:text-emerald-500" />
+                    </button>
+                  )}
                 </div>
               </div>
 
+              {/* --- HIGH-END RESULTS HUD --- */}
               {searchMounted && (
-                <div className={`absolute top-full right-0 mt-4 w-[420px] bg-[#050505]/95 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_40px_80px_rgba(0,0,0,0.9)] z-[110] overflow-hidden ${showSearch ? 'animate-in zoom-in' : 'animate-out zoom-out'} duration-300`}>
+                <div className={`absolute top-full right-0 mt-4 w-[420px] bg-[#050505]/95 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_40px_80px_rgba(0,0,0,0.9)] z-[110] overflow-hidden ${showSearch ? 'animate-in zoom-in slide-in-from-top-4' : 'animate-out zoom-out'} duration-300`}>
+                  {/* HUD Header */}
                   <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/[0.02]">
                     <div className="flex items-center gap-2">
-                      <div className="w-1 h-3 bg-emerald-500 rounded-full" />
                       <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">Database Matches</span>
                     </div>
+                    <span className="text-[8px] font-bold text-emerald-500/40 uppercase">Index: {searchResults.length}</span>
                   </div>
+
                   <div className="p-3 space-y-1">
-                    {searchResults.length > 0 ? searchResults.map((m) => (
-                      <div key={m.mal_id} onClick={() => navigate(`/read/${m.mal_id}`)} className="group flex gap-4 p-3 hover:bg-white/[0.03] rounded-2xl cursor-pointer transition-all border border-transparent hover:border-white/5">
-                        <img src={m.images.jpg.image_url} className="w-12 h-16 object-cover rounded-lg shadow-2xl ring-1 ring-white/10 group-hover:ring-emerald-500/30" alt="" />
-                        <div className="flex flex-col justify-center min-w-0 flex-1">
-                          <h4 className="text-[11px] font-black uppercase tracking-tight text-gray-200 group-hover:text-emerald-400 truncate">{m.title}</h4>
-                          <div className="flex items-center gap-3 mt-1.5 text-[8px] font-black text-gray-600 uppercase tracking-widest">
-                              <span className="text-emerald-500">★ {m.score || '0.0'}</span>
-                              <span>{m.type} • {m.status}</span>
+                    {searchResults.length > 0 ? (
+                      searchResults.map((manga) => (
+                        <div
+                          key={manga.mal_id}
+                          onClick={() => { navigate(`/read/${manga.mal_id}`); setShowSearch(false); setSearchQuery(''); }}
+                          className="group relative flex gap-4 p-3 hover:bg-white/[0.03] rounded-2xl cursor-pointer transition-all duration-300 border border-transparent hover:border-white/5"
+                        >
+                          <div className="relative w-12 h-16 flex-shrink-0">
+                            <img src={manga.images.jpg.image_url} className="w-full h-full object-cover rounded-lg shadow-2xl group-hover:scale-105 transition-transform" alt="" />
+                            <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/10 group-hover:ring-emerald-500/30 transition-all" />
                           </div>
+
+                          <div className="flex flex-col justify-center min-w-0 flex-1">
+                            <h4 className="text-[11px] font-black uppercase tracking-tight text-gray-200 group-hover:text-emerald-400 transition-colors truncate">
+                              {manga.title}
+                            </h4>
+                            <div className="flex items-center gap-3 mt-1.5">
+                                <div className="flex items-center gap-1">
+                                  <Star size={10} className="text-emerald-500 fill-emerald-500" />
+                                  <span className="text-[10px] font-black text-white">{manga.score || '0.0'}</span>
+                                </div>
+                                <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest">{manga.type || 'Manga'} • {manga.status}</span>
+                            </div>
+                          </div>
+                          
+                          <ChevronRight size={14} className="self-center text-gray-800 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
                         </div>
-                        <ChevronRight size={14} className="self-center text-gray-800 group-hover:text-emerald-500" />
+                      ))
+                    ) : !isSearching && (
+                      <div className="py-12 flex flex-col items-center opacity-20">
+                         <FilterX size={32} className="mb-2" />
+                         <span className="text-[9px] font-black uppercase tracking-[0.3em]">No Data Found</span>
                       </div>
-                    )) : !isSearching && <div className="py-8 flex flex-col items-center opacity-20"><FilterX size={24} className="mb-2"/><span className="text-[9px] font-black uppercase tracking-widest">No Matches Found</span></div>}
+                    )}
                   </div>
+
+                  {/* HUD Footer */}
+                  <button onClick={() => { navigate(`/browse?q=${encodeURIComponent(searchQuery)}`); setShowSearch(false); setSearchQuery(''); }} className="w-full py-4 bg-emerald-500/5 hover:bg-emerald-500/10 border-t border-white/5 transition-colors group">
+                    <span className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.4em] group-hover:tracking-[0.5em] transition-all">
+                      VIEW MORE
+                    </span>
+                  </button>
                 </div>
               )}
             </div>
 
-            <button onClick={() => setIsSettingsOpen(true)} className="p-2.5 rounded-full bg-opacity-0 opacity-50 hover:opacity-100 bg-white text-gray-400 hover:bg-opacity-10 hover:border-emerald-500/30 transition-all active:scale-90"><Settings size={20} /></button>
           </div>
         </div>
       </header>
-
-      {/* --- SETTINGS MODAL --- */}
-      {isSettingsOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-md animate-in fade-in" onClick={() => setIsSettingsOpen(false)} />
-          <div className="relative w-full max-w-lg bg-[#050505] border border-white/10 rounded-[2.5rem] shadow-[0_0_80px_rgba(0,0,0,0.9)] overflow-hidden animate-in zoom-in">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50" />
-            <div className="p-10 relative z-10">
-              <div className="flex items-center justify-between mb-10">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 mb-1">System Core</span>
-                  <h2 className="text-3xl font-[900] tracking-tighter uppercase italic text-white leading-none">Control <span className="text-emerald-500">Panel</span></h2>
-                </div>
-                <button onClick={() => setIsSettingsOpen(false)} className="p-3 bg-white/5 hover:bg-red-500/10 border border-white/5 rounded-2xl transition-all group"><X size={20} className="text-gray-500 group-hover:text-red-500 group-hover:rotate-90 transition-all" /></button>
-              </div>
-              <div className="space-y-4">
-                <div className="group flex items-center justify-between p-5 bg-white/[0.03] hover:bg-white/[0.06] rounded-[1.5rem] border border-white/5 transition-all">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-black rounded-xl border border-white/5 group-hover:border-emerald-500/30"><ShieldCheck className="text-emerald-500" size={20} /></div>
-                    <div className="flex flex-col"><span className="text-xs font-black uppercase tracking-widest">Safe Search</span><span className="text-[10px] text-gray-500 font-bold uppercase opacity-60">Block Explicit Index</span></div>
-                  </div>
-                  <button onClick={() => setSafeSearch(!safeSearch)} className={`w-14 h-7 rounded-full transition-all relative border ${safeSearch ? 'bg-emerald-600 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]' : 'bg-white/5 border-white/10'}`}><div className={`absolute top-1 w-4 h-4 rounded-full transition-all ${safeSearch ? 'left-8 bg-white shadow-[0_0_10px_white]' : 'left-1 bg-gray-600'}`} /></button>
-                </div>
-                <div className="group flex items-center justify-between p-5 bg-white/[0.03] hover:bg-white/[0.06] rounded-[1.5rem] border border-white/5 transition-all">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 bg-black rounded-xl border border-white/5 group-hover:border-emerald-500/30"><Globe className="text-emerald-500" size={20} /></div>
-                    <div className="flex flex-col"><span className="text-xs font-black uppercase tracking-widest">Data Saver</span><span className="text-[10px] text-gray-500 font-bold uppercase opacity-60">Low-Latency Rendering</span></div>
-                  </div>
-                  <button onClick={() => setHdImages(!hdImages)} className={`w-14 h-7 rounded-full transition-all relative border ${!hdImages ? 'bg-emerald-600 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]' : 'bg-white/5 border-white/10'}`}><div className={`absolute top-1 w-4 h-4 rounded-full transition-all ${!hdImages ? 'left-8 bg-white shadow-[0_0_10px_white]' : 'left-1 bg-gray-600'}`} /></button>
-                </div>
-                <button className="group w-full py-5 bg-gradient-to-b from-white/[0.05] to-transparent hover:from-red-500/10 hover:to-red-500/5 rounded-[1.5rem] border border-white/5 transition-all flex items-center justify-center gap-3">
-                  <RotateCcw size={16} className="text-gray-500 group-hover:text-red-500 group-hover:rotate-[-180deg] transition-all duration-700" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 group-hover:text-red-500">Flush System Cache</span>
-                </button>
-              </div>
-              <div className="mt-10 pt-8 border-t border-white/5 flex items-center justify-between">
-                <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest">Protocol: MV-DB-SECURE</span>
-                <span className="text-[8px] font-black text-gray-700 uppercase tracking-widest">Build 2.4.0-Stable</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* --- CONTENT --- */}
       <div className="absolute top-0 left-0 w-full h-[70vh] overflow-hidden pointer-events-none">
@@ -317,7 +316,7 @@ const Manga: React.FC = () => {
       <div className="relative z-10 container mx-auto px-4 pt-8">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full transition-all border border-white/5 mb-8 group">
           <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm font-black uppercase tracking-widest">Index</span>
+          <span className="text-sm font-black uppercase tracking-widest">BACK</span>
         </button>
 
         <div className="flex flex-col lg:flex-row gap-12">
@@ -330,23 +329,15 @@ const Manga: React.FC = () => {
                   RANK #{data.rank || 'N/A'}
                 </div>
               </div>
-              <button onClick={handleStartReading} disabled={isLinking} className={`w-full py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-2 shadow-lg ${isLinking ? 'bg-gray-700' : 'bg-emerald-600 hover:bg-emerald-500 active:scale-95 shadow-emerald-600/20'}`}>
+              <button onClick={handleStartReading} disabled={isLinking} className={`w-full py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-2 shadow-lg ${isLinking ? 'bg-gray-700' : 'bg-emerald-500 border border-emerald-600 border-opacity-20 bg-opacity-25 hover:bg-opacity-75 hover:border-opacity-50 hover:scale-105 active:scale-95 shadow-emerald-600/20'}`}>
                 {isLinking ? <Loader2 className="animate-spin" size={20} /> : <><Play size={20} fill="currentColor" /> START READING</>}
               </button>
             </div>
           </div>
 
           {/* DETAILS */}
-          <div className="flex-grow pt-4">
+          <div className="flex-grow pt-2">
             <div className="space-y-8">
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-1.5 bg-yellow-500/10 text-yellow-500 px-3 py-1.5 rounded-xl border border-yellow-500/20 font-black">
-                   <Star size={16} fill="currentColor" /><span>{data.score || '0.0'}</span>
-                </div>
-                <span className="bg-emerald-600/10 text-emerald-400 px-3 py-1.5 rounded-xl border border-emerald-500/20 font-black uppercase text-xs tracking-widest">{data.type || 'Manga'}</span>
-                <span className="text-gray-500 font-bold uppercase text-xs tracking-widest">{data.status}</span>
-              </div>
-
               <h1 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter leading-[0.85] text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500">
                 {data.title}
               </h1>
@@ -361,9 +352,11 @@ const Manga: React.FC = () => {
                     {gomangaData ? `Last Updated: ${gomangaData.lastUpdated}` : 'Searching Database Node...'}
                 </p>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-1 h-4 bg-emerald-500" /><h3 className="text-emerald-500 font-black uppercase tracking-widest text-[11px]">Synopsis</h3>
                 </div>
-                <p className="text-gray-300 leading-relaxed text-lg font-medium line-clamp-6 hover:line-clamp-none transition-all duration-700 bg-white/[0.02] p-6 rounded-3xl border border-white/5">{data.synopsis}</p>
+                <div className="text-gray-300 leading-relaxed text-lg font-medium line-clamp-6 hover:line-clamp-none transition-all duration-700 bg-white/[0.02] p-6 rounded-3xl border border-white/5">
+                  <h3 className="text-white font-black uppercase tracking-widest text-[11px] mb-2 text-opacity-50">Details</h3>
+                  <p>{data.synopsis}</p>
+                </div>
               </div>
 
               {/* STATS HUD */}
