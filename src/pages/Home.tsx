@@ -354,7 +354,7 @@ const Home: React.FC = () => {
                 <div className="relative aspect-[2/3] rounded-2xl overflow-hidden bg-white/5 border border-white/10 group-hover:border-emerald-500/40 transition-all shadow-lg transform-gpu">
                   <img
                     src={manga.images.jpg.image_url}
-                    className="w-full h-full object-cover group-hover:scale-110 clicker group-hover:scale-95 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-110 clicker hover:scale-95 transition-transform duration-300"
                     alt={manga.title}
                   />
                   
