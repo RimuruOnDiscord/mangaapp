@@ -63,8 +63,8 @@ const CustomNavLink: React.FC<CustomNavLinkProps> = ({ icon: Icon, label, to }) 
   <NavLink
     to={to}
     className={({ isActive }) =>
-      `flex items-center gap-2 px-3 py-2 rounded-lg font-bold text-sm transition-colors ${
-        isActive ? 'bg-emerald-600 text-black' : 'text-gray-300 hover:bg-white/10'
+      `flex items-center gap-2 px-3 py-2 rounded-lg font-bold text-sm hover:transition-colors ${
+        isActive ? 'bg-emerald-400 bg-opacity-10 text-emerald-400' : 'text-gray-300 hover:bg-white/10'
       }`
     }
   >
@@ -84,10 +84,6 @@ const Home: React.FC = () => {
   const [searchMounted, setSearchMounted] = useState(false);
 
   const navigate = useNavigate();
-
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [safeSearch, setSafeSearch] = useState(true);
-  const [hdImages, setHdImages] = useState(true);
 
   // Animation styles injection (Emerald Themed)
   useEffect(() => {
@@ -188,9 +184,11 @@ const Home: React.FC = () => {
               <div className="flex flex-col leading-none">
                 <div className="flex items-center gap-1.5">
                     <span className="text-xl font-[900] tracking-tighter text-white">MANGA</span><span className="text-xl font-[900] tracking-tighter text-emerald-500">VEL</span>
-                    <span className="bg-emerald-500 text-[9px] font-black px-1.5 py-0.5 rounded-sm italic text-black -translate-y-1">v2</span>
+                    <span className="bg-emerald-500 bg-opacity-10 text-[11px] font-black px-1.5 py-0.5 rounded-sm italic text-emerald-400 -translate-y-1">v2</span>
                 </div>
-                <span className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase opacity-60">FAST • FREE • ONLINE</span>
+            <span className="text-[9.7px] font-bold text-gray-500 tracking-[0.2em] uppercase opacity-60">
+              FAST • FREE • ONLINE
+            </span>
               </div>
             </div>
 
@@ -304,113 +302,10 @@ const Home: React.FC = () => {
               )}
             </div>
 
-            {/* SETTINGS BUTTON */}
-      <button 
-                onClick={() => setIsSettingsOpen(true)}
-                className="p-2.5 rounded-full bg-opacity-0 opacity-50 hover:opacity-100 bg-white text-gray-400 hover:bg-opacity-10 hover:border-emerald-500/30 transition-all active:scale-90"
-            >
-                <Settings size={20} />
-            </button>
           </div>
         </div>
       </header>
 
-      {/* SETTINGS MODAL FRAME */}
-      {isSettingsOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <div 
-                className="absolute inset-0 bg-black/60 backdrop-blur-md animate-in fade-in duration-300" 
-                onClick={() => setIsSettingsOpen(false)}
-            />
-            
-            {/* Frame */}
-            <div className="relative w-full max-w-lg bg-[#050505] border border-white/10 rounded-[2.5rem] shadow-[0_0_80px_rgba(0,0,0,0.9)] overflow-hidden animate-in zoom-in duration-500">
-              {/* Premium Background Accents */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-50" />
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-emerald-600/10 blur-[80px] rounded-full" />
-              <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-emerald-600/5 blur-[80px] rounded-full" />
-
-              <div className="p-10 relative z-10">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-10">
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60">Site Settings</span>
-                    </div>
-                    <h2 className="text-3xl font-[900] tracking-tighter uppercase italic leading-none text-white">Control PANEL</h2>
-                  </div>
-                  <button 
-                    onClick={() => setIsSettingsOpen(false)} 
-                    className="group p-3 bg-white/5 hover:bg-red-500/10 border border-white/5 hover:border-red-500/20 rounded-2xl transition-all duration-300"
-                  >
-                    <X size={20} className="text-gray-500 group-hover:text-red-500 group-hover:rotate-90 transition-all duration-300" />
-                  </button>
-                </div>
-
-                {/* Settings List */}
-                <div className="space-y-4">
-                  {/* Setting Item: Safe Search */}
-                  <div className="group flex items-center justify-between p-5 bg-white/[0.03] hover:bg-white/[0.06] rounded-[1.5rem] border border-white/5 transition-all duration-300">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-black rounded-xl border border-white/5 group-hover:border-emerald-500/30 transition-colors">
-                        <ShieldCheck className="text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]" size={20} />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-black uppercase tracking-widest text-white">Safe Search</span>
-                        <span className="text-[10px] text-gray-500 font-bold uppercase tracking-tight opacity-60">Block Explicit Content</span>
-                      </div>
-                    </div>
-                    <button onClick={() => setSafeSearch(!safeSearch)} className={`w-14 h-7 rounded-full transition-all duration-500 relative border ${safeSearch ? 'bg-emerald-600 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]' : 'bg-white/5 border-white/10'}`}>
-                      <div className={`absolute top-1 w-[1.1rem] h-[1.1rem] rounded-full transition-all duration-500 ${safeSearch ? 'left-8 bg-white shadow-[0_0_10px_white]' : 'left-1 bg-gray-600'}`} />
-                    </button>
-                  </div>
-
-                  {/* Setting Item: Data Saver */}
-                  <div className="group flex items-center justify-between p-5 bg-white/[0.03] hover:bg-white/[0.06] rounded-[1.5rem] border border-white/5 transition-all duration-300">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-black rounded-xl border border-white/5 group-hover:border-emerald-500/30 transition-colors">
-                        <Globe className="text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]" size={20} />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-black uppercase tracking-widest text-white">Engine Optimization</span>
-                        <span className="text-[10px] text-gray-500 font-bold uppercase tracking-tight opacity-60">High Performance Mode</span>
-                      </div>
-                    </div>
-                    <button onClick={() => setHdImages(!hdImages)} className={`w-14 h-7 rounded-full transition-all duration-500 relative border ${!hdImages ? 'bg-emerald-600 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]' : 'bg-white/5 border-white/10'}`}>
-                      <div className={`absolute top-1 w-[1.1rem] h-[1.1rem] rounded-full transition-all duration-500 ${!hdImages ? 'left-8 bg-white shadow-[0_0_10px_white]' : 'left-1 bg-gray-600'}`} />
-                    </button>
-                  </div>
-
-                  {/* Action: Clear Cache */}
-                  <div className="pt-6">
-                    <button className="group w-full py-5 bg-gradient-to-b from-white/[0.05] to-transparent hover:from-red-500/10 hover:to-red-500/5 rounded-[1.5rem] border border-white/5 hover:border-red-500/20 transition-all duration-500 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity" />
-                      <div className="relative flex items-center justify-center gap-3">
-                        <RotateCcw size={16} className="text-gray-500 group-hover:text-red-500 group-hover:rotate-[-180deg] transition-all duration-700" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 group-hover:text-red-500 transition-colors">Flush System Cache</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="mt-10 pt-8 border-t border-white/5 flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest">Protocol</span>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase">MV-DB-SECURE</span>
-                  </div>
-                  <div className="text-right">
-                    <div className="flex items-center gap-2 justify-end mb-1">
-                      <span className="text-[10px] font-black text-white italic tracking-tighter">MANGA<span className="text-emerald-500">VEL</span></span>
-                      <span className="bg-emerald-500 text-[7px] font-black px-1 rounded-sm text-black">v2</span>
-                    </div>
-                    <span className="text-[8px] font-black text-gray-700 uppercase tracking-widest">Build 2.4.0-Stable</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>
-      )}
 
       {/* MAIN LAYOUT */}
       <main className="container mx-auto px-4 py-8 space-y-12">
@@ -431,7 +326,7 @@ const Home: React.FC = () => {
                  </div>
                  <h1 className="text-4xl md:text-7xl font-black mb-6 max-w-2xl leading-none uppercase italic tracking-tighter">Sakamoto Days</h1>
                  <div className="flex gap-4">
-                     <button onClick={() => navigate(`/read/${topManga[0].mal_id}`)} className="bg-white bg-opacity-10 backdrop-blur-sm border border-white/10 hover:bg-emerald-500 hover:bg-opacity-25 px-10 py-4 rounded-2xl font-bold transition-all shadow-xl">
+                     <button onClick={() => navigate(`/read/${topManga[0].mal_id}`)} className="bg-white bg-opacity-10 hover:scale-105 active:scale-95 backdrop-blur-sm border border-white/10 hover:bg-emerald-500 hover:bg-opacity-25 px-10 py-4 rounded-2xl font-bold transition-all shadow-xl">
                       READ NOW
                     </button>
                  </div>
@@ -454,12 +349,12 @@ const Home: React.FC = () => {
               <div
                 key={manga.mal_id}
                 onClick={() => navigate(`/read/${manga.mal_id}`)}
-                className="group cursor-pointer hover:scale-105 transition-all duration-300"
+                className="group cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300"
               >
                 <div className="relative aspect-[2/3] rounded-2xl overflow-hidden bg-white/5 border border-white/10 group-hover:border-emerald-500/40 transition-all shadow-lg transform-gpu">
                   <img
                     src={manga.images.jpg.image_url}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-110 clicker group-hover:scale-95 transition-transform duration-300"
                     alt={manga.title}
                   />
                   
