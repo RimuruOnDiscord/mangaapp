@@ -183,11 +183,14 @@ const Manga: React.FC = () => {
       <header className="sticky top-0 z-[100] w-full bg-[#050505]/80 backdrop-blur-xl border-b border-white/5 transition-all">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <div onClick={() => navigate('/')} className="flex items-center gap-3 group active:scale-95 transition-transform cursor-pointer">
+            <div 
+              onClick={() => navigate('/')}
+              className="flex items-center gap-3 group transition-transform active:scale-95 cursor-pointer"
+            >
               <Logo className="w-10 h-10" /> 
               <div className="flex flex-col leading-none">
                 <div className="flex items-center gap-1.5">
-                    <span className="text-xl font-[900] tracking-tighter">MANGA</span><span className="text-xl font-[900] tracking-tighter text-emerald-500">VEL</span>
+                    <span className="text-xl font-[900] tracking-tighter text-white">MANGA</span><span className="text-xl font-[900] tracking-tighter text-emerald-500">VEL</span>
                     <span className="bg-emerald-500 bg-opacity-10 text-[11px] font-black px-1.5 py-0.5 rounded-sm italic text-emerald-400 -translate-y-1">v2</span>
                 </div>
             <span className="text-[9.7px] font-bold text-gray-500 tracking-[0.2em] uppercase opacity-60">
@@ -196,12 +199,15 @@ const Manga: React.FC = () => {
               </div>
             </div>
 
-            <nav className="hidden lg:flex items-center gap-2">
-              <CustomNavLink icon={Folder} label="Browse" to="/browse" />
-              <CustomNavLink icon={Zap} label="Newest" to="/newest" />
-              <CustomNavLink icon={Clock} label="Updated" to="/updated" />
-              <CustomNavLink icon={Layers} label="Added" to="/added" />
-              <CustomNavLink icon={Dices} label="Random" to="/random" />
+            {/* Nav Links */}
+            <nav className="hidden md:flex items-center gap-2">
+              <div className="hidden lg:flex items-center gap-6">
+                <CustomNavLink icon={Folder} label="Browse" to="/browse" />
+                <CustomNavLink icon={Zap} label="Newest" to="/newest" />
+                <CustomNavLink icon={Clock} label="Updated" to="/updated" />
+                <CustomNavLink icon={Layers} label="Added" to="/added" />
+                <CustomNavLink icon={Dices} label="Random" to="/random" />
+              </div>
             </nav>
           </div>
 
