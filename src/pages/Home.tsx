@@ -261,7 +261,7 @@ const Home: React.FC = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => searchQuery && setShowSearch(true)}
                   onBlur={() => setTimeout(() => setShowSearch(false), 200)} // Keep dropdown open briefly
-                  className="bg-[#080809] border border-white/10 rounded-xl py-2.5 pl-11 pr-12 text-[11px] font-bold tracking-wide w-[240px] md:w-[280px] focus:w-[360px] focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all duration-500 text-gray-200 placeholder:text-gray-600 uppercase"
+                  className="bg-[#080809] border border-white/10 rounded-xl py-2.5 pl-11 pr-12 text-[11px] font-black tracking-widest w-[240px] md:w-[280px] focus:w-[360px] focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all duration-500 text-gray-200 focus:text-white placeholder:text-gray-600 uppercase"
                   placeholder="Search..."
                 />
                 
@@ -474,7 +474,7 @@ const Home: React.FC = () => {
                  </div>
                  <h1 className="text-4xl md:text-7xl font-black mb-6 max-w-2xl leading-none uppercase italic tracking-tighter">Sakamoto Days</h1>
                  <div className="flex gap-4">
-                     <button onClick={() => navigate(`/read/131334`)} className="bg-white bg-opacity-10 backdrop-blur-sm border border-white/10 hover:bg-emerald-500 hover:bg-opacity-25 px-10 py-4 rounded-2xl font-bold transition-all shadow-xl">
+                     <button onClick={() => navigate(`/read/${topManga[0].mal_id}`)} className="bg-white bg-opacity-10 backdrop-blur-sm border border-white/10 hover:bg-emerald-500 hover:bg-opacity-25 px-10 py-4 rounded-2xl font-bold transition-all shadow-xl">
                       READ NOW
                     </button>
                  </div>
@@ -541,4 +541,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
