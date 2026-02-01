@@ -62,7 +62,7 @@ const CustomNavLink: React.FC<CustomNavLinkProps> = ({ icon: Icon, label, to }) 
     to={to}
     className={({ isActive }) =>
       `flex items-center gap-2 px-3 py-2 rounded-lg font-bold text-sm transition-colors ${
-        isActive ? 'bg-emerald-600 text-black' : 'text-gray-300 hover:bg-white/10'
+        isActive ? 'bg-emerald-400/10 text-emerald-400' : 'text-gray-300 hover:bg-white/10'
       }`
     }
   >
@@ -247,16 +247,14 @@ useEffect(() => {
           <Logo className="w-10 h-10" /> 
           
           <div className="flex flex-col leading-none">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-0.5">
                 <span className="text-xl font-[900] tracking-tighter text-white">MANGA</span><span className="text-xl font-[900] tracking-tighter text-emerald-500">VEL</span>
                 
                 {/* The v2 Badge */}
-                <span className="bg-emerald-500 text-[9px] font-black px-1.5 py-0.5 rounded-sm italic text-black -translate-y-1">
-                  v2
-                </span>
+                <span className="bg-emerald-500 bg-opacity-10 text-[11px] font-black px-1.5 py-0.5 rounded-sm italic text-emerald-400 -translate-y-1">v2</span>
             </div>
             {/* Optional tagline that looks clean */}
-            <span className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase opacity-60">
+            <span className="text-[9.7px] font-bold text-gray-500 tracking-[0.2em] uppercase opacity-60">
               FAST • FREE • ONLINE
             </span>
           </div>
@@ -273,112 +271,103 @@ useEffect(() => {
           </div>
 
           <div className="flex items-center gap-3">
-<div className="relative group hidden sm:block">
-  {/* Outer Glow Effect on Focus */}
-  <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-transparent blur-lg opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-  
-  <div className="relative flex items-center">
-    <div className="relative flex items-center">
-      <input
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onFocus={() => {
-          if (searchQuery) setShowSearch(true);
-        }}
-        onBlur={() => setTimeout(() => setShowSearch(false), 200)}
-        className="bg-[#080809] border border-white/10 rounded-xl py-2.5 pl-11 pr-12 text-[11px] font-black tracking-widest w-[240px] md:w-[280px] focus:w-[360px] focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all duration-500 text-gray-200 focus:text-white placeholder:text-gray-600 uppercase"
-        placeholder="Search..."
-      />
-      
-      {/* Icon with focus glow */}
-      <Search 
-        className={`absolute left-4 transition-all duration-500 ${
-          searchQuery ? 'text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'text-gray-600'
-        }`} 
-        size={14} 
-      />
+            {/* IMPROVED SEARCH */}
+            <div className="relative group hidden sm:block">
+              {/* Outer Glow Effect on Focus */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-transparent blur-lg opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+              
+              <div className="relative flex items-center">
+                <input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => searchQuery && setShowSearch(true)}
+                  onBlur={() => setTimeout(() => setShowSearch(false), 200)} // Keep dropdown open briefly
+                  className="bg-[#080809] border border-white/10 rounded-xl py-2.5 pl-11 pr-12 text-[11px] font-black tracking-widest w-[240px] md:w-[280px] focus:w-[360px] focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all duration-500 text-gray-200 focus:text-white placeholder:text-gray-600 uppercase"
+                  placeholder="Search..."
+                />
+                
+                {/* Icon with focus glow */}
+                <Search 
+                  className={`absolute left-4 transition-all duration-500 ${
+                    searchQuery ? 'text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'text-gray-600'
+                  }`} 
+                  size={14} 
+                />
 
-      {/* Trailing Status Component */}
-      <div className="absolute right-4 flex items-center gap-2">
-        {isSearching ? (
-          <div className="flex gap-0.5">
-            <div className="w-1 h-3 bg-emerald-500 animate-[bounce_1s_infinite_0ms]" />
-            <div className="w-1 h-3 bg-emerald-500 animate-[bounce_1s_infinite_200ms]" />
-            <div className="w-1 h-3 bg-emerald-500 animate-[bounce_1s_infinite_400ms]" />
-          </div>
-        ) : searchQuery && (
-          <button onClick={() => setSearchQuery('')} className="hover:rotate-90 transition-transform duration-300">
-            <X size={14} className="text-gray-500 hover:text-emerald-500" />
-          </button>
-        )}
-      </div>
-    </div>
-  </div>
-
-  {/* --- HIGH-END RESULTS HUD --- */}
-  {showSearch && (
-    <div className={`absolute top-full right-0 mt-4 w-[420px] bg-[#050505]/95 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_40px_80px_rgba(0,0,0,0.9)] z-[110] overflow-hidden animate-in zoom-in slide-in-from-top-4 duration-300`}>
-      {/* HUD Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/[0.02]">
-        <div className="flex items-center gap-2">
-          <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">Database Matches</span>
-        </div>
-        <span className="text-[8px] font-bold text-emerald-500/40 uppercase">Index: {searchResults.length}</span>
-      </div>
-
-      <div className="p-3 space-y-1">
-        {searchResults.length > 0 ? (
-          searchResults.map((manga) => (
-            <div
-              key={manga.mal_id}
-              onClick={() => navigate(`/read/${manga.mal_id}`)}
-              className="group relative flex gap-4 p-3 hover:bg-white/[0.03] rounded-2xl cursor-pointer transition-all duration-300 border border-transparent hover:border-white/5"
-            >
-              <div className="relative w-12 h-16 flex-shrink-0">
-                <img src={manga.images.jpg.image_url} className="w-full h-full object-cover rounded-lg shadow-2xl group-hover:scale-105 transition-transform" alt="" />
-                <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/10 group-hover:ring-emerald-500/30 transition-all" />
-              </div>
-
-              <div className="flex flex-col justify-center min-w-0 flex-1">
-                <h4 className="text-[11px] font-black uppercase tracking-tight text-gray-200 group-hover:text-emerald-400 transition-colors truncate">
-                  {manga.title}
-                </h4>
-                <div className="flex items-center gap-3 mt-1.5">
-                    <div className="flex items-center gap-1">
-                      <Star size={10} className="text-emerald-500 fill-emerald-500" />
-                      <span className="text-[10px] font-black text-white">{manga.score || '0.0'}</span>
+                {/* Dynamic Status (Loading Spinner or Clear X) */}
+                <div className="absolute right-4 flex items-center gap-2">
+                  {isSearching ? (
+                    <div className="flex gap-0.5">
+                      <div className="w-1 h-3 bg-emerald-500 animate-[bounce_1s_infinite_0ms]" />
+                      <div className="w-1 h-3 bg-emerald-500 animate-[bounce_1s_infinite_200ms]" />
+                      <div className="w-1 h-3 bg-emerald-500 animate-[bounce_1s_infinite_400ms]" />
                     </div>
-                    <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest">{manga.type} • {manga.status}</span>
+                  ) : searchQuery && (
+                    <button onClick={() => setSearchQuery('')} className="hover:rotate-90 transition-transform duration-300">
+                      <X size={14} className="text-gray-500 hover:text-emerald-500" />
+                    </button>
+                  )}
                 </div>
               </div>
-              
-              <ChevronRight size={14} className="self-center text-gray-800 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+
+              {/* --- HIGH-END RESULTS HUD --- */}
+              {searchMounted && (
+                <div className={`absolute top-full right-0 mt-4 w-[420px] bg-[#050505]/95 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_40px_80px_rgba(0,0,0,0.9)] z-[110] overflow-hidden ${showSearch ? 'animate-in zoom-in slide-in-from-top-4' : 'animate-out zoom-out'} duration-300`}>
+                  {/* HUD Header */}
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/[0.02]">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">Database Matches</span>
+                    </div>
+                    <span className="text-[8px] font-bold text-emerald-500/40 uppercase">Index: {searchResults.length}</span>
+                  </div>
+
+                  <div className="p-3 space-y-1">
+                    {searchResults.length > 0 ? (
+                      searchResults.map((manga) => (
+                        <div
+                          key={manga.mal_id}
+                          onClick={() => { navigate(`/read/${manga.mal_id}`); setShowSearch(false); setSearchQuery(''); }}
+                          className="group relative flex gap-4 p-3 hover:bg-white/[0.03] rounded-2xl cursor-pointer transition-all duration-300 border border-transparent hover:border-white/5"
+                        >
+                          <div className="relative w-12 h-16 flex-shrink-0">
+                            <img src={manga.images.jpg.image_url} className="w-full h-full object-cover rounded-lg shadow-2xl group-hover:scale-105 transition-transform" alt="" />
+                            <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-white/10 group-hover:ring-emerald-500/30 transition-all" />
+                          </div>
+
+                          <div className="flex flex-col justify-center min-w-0 flex-1">
+                            <h4 className="text-[11px] font-black uppercase tracking-tight text-gray-200 group-hover:text-emerald-400 transition-colors truncate">
+                              {manga.title}
+                            </h4>
+                            <div className="flex items-center gap-3 mt-1.5">
+                                <div className="flex items-center gap-1">
+                                  <Star size={10} className="text-emerald-500 fill-emerald-500" />
+                                  <span className="text-[10px] font-black text-white">{manga.score || '0.0'}</span>
+                                </div>
+                                <span className="text-[8px] font-black text-gray-600 uppercase tracking-widest">{manga.type || 'Manga'} • {manga.status}</span>
+                            </div>
+                          </div>
+                          
+                          <ChevronRight size={14} className="self-center text-gray-800 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+                        </div>
+                      ))
+                    ) : !isSearching && (
+                      <div className="py-12 flex flex-col items-center opacity-20">
+                         <FilterX size={32} className="mb-2" />
+                         <span className="text-[9px] font-black uppercase tracking-[0.3em]">No Data Found</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* HUD Footer */}
+                  <button onClick={() => { navigate(`/browse?q=${encodeURIComponent(searchQuery)}`); setShowSearch(false); setSearchQuery(''); }} className="w-full py-4 bg-emerald-500/5 hover:bg-emerald-500/10 border-t border-white/5 transition-colors group">
+                    <span className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.4em] group-hover:tracking-[0.5em] transition-all">
+                      VIEW MORE
+                    </span>
+                  </button>
+                </div>
+              )}
             </div>
-          ))
-        ) : !isSearching && (
-          <div className="py-12 flex flex-col items-center opacity-20">
-             <FilterX size={32} className="mb-2" />
-             <span className="text-[9px] font-black uppercase tracking-[0.3em]">No Data Found</span>
-          </div>
-        )}
-      </div>
 
-      {/* HUD Footer */}
-      <button className="w-full py-4 bg-emerald-500/5 hover:bg-emerald-500/10 border-t border-white/5 transition-colors group">
-        <span className="text-[9px] font-black text-emerald-500 uppercase tracking-[0.4em] group-hover:tracking-[0.5em] transition-all">
-          Execute Global Search
-        </span>
-      </button>
-    </div>
-  )}
-</div>
-
-      <button 
-                onClick={() => setIsSettingsOpen(true)}
-                className="p-2.5 rounded-full bg-opacity-0 opacity-50 hover:opacity-100 bg-white text-gray-400 hover:bg-opacity-10 hover:border-emerald-500/30 transition-all active:scale-90"
-            >
-                <Settings size={20} />
-            </button>
           </div>
         </div>
       </header>
@@ -511,9 +500,9 @@ useEffect(() => {
         
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
           {mangaList.map((manga, idx) => (
-            <div key={`${manga.mal_id}-${idx}`} onClick={() => navigate(`/read/${manga.mal_id}`)} className="group cursor-pointer hover:scale-105 transition-all duration-300">
+            <div key={`${manga.mal_id}-${idx}`} onClick={() => navigate(`/read/${manga.mal_id}`)} className="group cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300">
               <div className="relative aspect-[2/3] rounded-2xl overflow-hidden bg-white/5 border border-white/10 group-hover:border-emerald-500/40 transition-all shadow-lg transform-gpu">
-                <img src={manga.images.jpg.image_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />
+                <img src={manga.images.jpg.image_url} className="w-full h-full object-cover group-hover:scale-110 active:scale-95 transition-transform duration-500" alt="" />
                 <div className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-black border border-white/10 flex items-center gap-1">
                    <Hash size={10}/> {manga.chapters || '?'}
                 </div>
