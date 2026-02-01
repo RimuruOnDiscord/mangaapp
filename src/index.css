@@ -69,14 +69,6 @@
   mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
 }
 
-/* Hide system cursor aggressively */
-*, *::before, *::after {
-  cursor: none !important;
-}
-
-html, body, button, a, input, select, textarea, [role="button"], .cursor-pointer {
-  cursor: none !important;
-}
 
 /* Netflix-style protection */
 body {
