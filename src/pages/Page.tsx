@@ -107,7 +107,7 @@ const Page: React.FC = () => {
       <main className="flex-grow flex flex-col relative overflow-hidden bg-black">
         <header className="h-16 border-b border-white/5 bg-[#050505]/95 backdrop-blur-xl flex items-center justify-between px-6 z-50">
            <div className="flex items-center gap-6">
-             <button onClick={() => navigate('/')} className="p-2 -ml-2 text-gray-400 hover:text-emerald-500 transition-colors">
+             <button onClick={() => navigate('/')} className="p-2 -ml-2 text-gray-400 hover:text-emerald-500 transition-colors hover:scale-110 active:scale-95">
                <ChevronLeft size={24}/>
              </button>
              <div onClick={() => navigate('/')} className="flex items-center gap-3 cursor-pointer group">
@@ -116,19 +116,19 @@ const Page: React.FC = () => {
                   <div className="flex items-center gap-1.5">
                       <span className="text-xl font-[900] tracking-tighter">MANGA</span>
                       <span className="text-xl font-[900] tracking-tighter text-emerald-500">VEL</span>
-                      <span className="bg-emerald-500 text-[9px] font-black px-1.5 py-0.5 rounded-sm italic text-black -translate-y-1">v2</span>
+                      <span className="bg-emerald-500 bg-opacity-10 text-[11px] font-black px-1.5 py-0.5 rounded-sm italic text-emerald-400 -translate-y-1">v2</span>
                   </div>
-                  <span className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase opacity-60">FAST • FREE • ONLINE</span>
+            <span className="text-[9.7px] font-bold text-gray-500 tracking-[0.2em] uppercase opacity-60">
+              FAST • FREE • ONLINE
+            </span>
                 </div>
              </div>
            </div>
 
            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="flex items-center gap-4 group active:scale-95 transition-all">
              <div className="flex flex-col items-end leading-none">
-                <span className="text-[10px] font-black uppercase text-gray-500 tracking-widest mb-1">Sidebar</span>
-                <span className="text-[11px] font-bold text-emerald-500 uppercase">Menu</span>
              </div>
-             <div className={`p-2.5 rounded-xl border transition-all ${sidebarOpen ? 'bg-emerald-500 border-emerald-400 text-black' : 'bg-emerald-500/5 border-emerald-500/20 text-emerald-500'}`}>
+             <div className={`p-2.5 rounded-xl border transition-all ${sidebarOpen ? 'bg-emerald-500 border-emerald-400 text-black' : 'bg-emerald-500/5 border-emerald-500/20 text-emerald-500 hover:scale-110' }`}>
                <Layout size={20} />
              </div>
            </button>
