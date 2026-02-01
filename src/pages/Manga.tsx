@@ -120,6 +120,8 @@ const Manga: React.FC = () => {
   const [safeSearch, setSafeSearch] = useState(true);
   const [hdImages, setHdImages] = useState(true);
 
+  const sanitize = (str: string) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
+
   // Animations CSS Injection
   useEffect(() => {
     const id = 'vf-ui-animations';
@@ -171,28 +173,52 @@ const Manga: React.FC = () => {
         setData(json.data);
 
         if (json.data) {
+          // 1. Search for the manga
           const searchRes = await fetch(`/gomanga-api/api/search/${encodeURIComponent(json.data.title)}`);
           const searchData = await searchRes.json();
+          
           if (searchData.manga?.length > 0) {
-            const detailRes = await fetch(`/gomanga-api/api/manga/${searchData.manga[0].id}`);
+            // 2. SMART MATCHING: Find the result that best matches the MAL title
+            // This prevents picking "Blue Lock One-shot" instead of "Blue Lock"
+            const targetTitle = sanitize(json.data.title);
+            let bestMatch = searchData.manga[0];
+
+            for (const m of searchData.manga) {
+                if (sanitize(m.title) === targetTitle) {
+                    bestMatch = m;
+                    break;
+                }
+            }
+
+            // 3. Fetch specific details for that match
+            const detailRes = await fetch(`/gomanga-api/api/manga/${bestMatch.id}`);
             const detailData = await detailRes.json();
             setGomangaData(detailData);
           }
         }
-      } catch (e) { console.error(e); } finally { setLoading(false); }
+      } catch (e) { 
+        console.error("Fetch Error:", e); 
+      } finally { 
+        setLoading(false); 
+      }
     };
     fetchAll();
     window.scrollTo(0, 0);
   }, [mangaId]);
 
-  const handleStartReading = async () => {
-    if (!data) return;
-    setIsLinking(true);
-    try {
-      const searchRes = await fetch(`/gomanga-api/api/search/${encodeURIComponent(data.title)}`);
-      const searchData = await searchRes.json();
-      if (searchData.manga?.length > 0) navigate(`/read/${searchData.manga[0].id}/chapter/1`);
-    } catch (e) { console.error(e); } finally { setIsLinking(false); }
+ const handleStartReading = async () => {
+    // If we already have the chapter data, use it immediately
+    if (gomangaData?.chapters?.length > 0) {
+      setIsLinking(true);
+      // Sort chapters to find the first one (usually at the end of the array or index 0)
+      // We look for the chapter with the lowest number or the last one in the list
+      const chapters = gomangaData.chapters;
+      const firstChapter = chapters[chapters.length - 1]; // Usually APIs list newest first
+      
+      navigate(`/read/${gomangaData.id}/chapter/1/`);
+      setIsLinking(false);
+      return;
+    }
   };
 
   if (loading) return <div className="min-h-screen bg-[#050505] flex items-center justify-center"><div className="w-10 h-10 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" /></div>;
@@ -236,8 +262,8 @@ const Manga: React.FC = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => searchQuery && setShowSearch(true)}
                   onBlur={() => setTimeout(() => setShowSearch(false), 200)}
-                  className="bg-[#080809] border border-white/10 rounded-xl py-2.5 pl-11 pr-12 text-[11px] font-black tracking-widest w-[240px] md:w-[280px] focus:w-[360px] focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all duration-500 text-gray-200 placeholder:text-gray-600 uppercase"
-                  placeholder="System Search..."
+                  className="bg-[#080809] border border-white/10 rounded-xl py-2.5 pl-11 pr-12 text-[11px] font-black tracking-widest w-[240px] md:w-[280px] focus:w-[360px] focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all duration-500 text-gray-200 focus:text-white placeholder:text-gray-600 uppercase"
+                  placeholder="Search..."
                 />
                 <Search className={`absolute left-4 transition-all duration-500 ${searchQuery ? 'text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'text-gray-600'}`} size={14} />
                 <div className="absolute right-4 flex items-center gap-2">
