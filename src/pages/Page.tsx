@@ -150,7 +150,7 @@ const Page: React.FC = () => {
       <main className="flex-grow flex flex-col relative overflow-hidden bg-black">
         <header className="h-16 border-b border-white/5 bg-[#050505]/95 backdrop-blur-xl flex items-center justify-between px-6 z-50">
            <div className="flex items-center gap-6">
-             <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-gray-400 hover:text-emerald-500 transition-colors">
+             <button onClick={() => navigate('/')} className="p-2 -ml-2 text-gray-400 hover:text-emerald-500 transition-colors">
                <ChevronLeft size={24}/>
              </button>
              <div onClick={() => navigate('/')} className="flex items-center gap-3 cursor-pointer group">
@@ -255,7 +255,7 @@ const Page: React.FC = () => {
                               onClick={() => { navigate(`/read/${mangaId}/chapter/${ch.chapterId}`); setOpenDropdown(null); }}
                               className={`w-full text-left px-4 py-3 rounded-xl text-[10px] font-black uppercase transition-all mb-1 flex items-center justify-between ${chapterId === ch.chapterId ? 'text-emerald-400 bg-emerald-500/10' : 'text-gray-500 hover:bg-white/5 hover:text-white'}`}
                           >
-                            CH {ch.chapterId} {ch.isMissing && '(EXT)'}
+                            CH {ch.chapterId} {ch.isMissing}
                             {chapterId === ch.chapterId && <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />}
                           </button>
                         ))}
@@ -287,7 +287,6 @@ const Page: React.FC = () => {
               <SidebarOption icon={Layout} label="Long Strip" active={readingMode === 'long-strip'} onClick={() => setReadingMode('long-strip')} />
               <SidebarOption icon={Columns} label="Single Page" active={readingMode === 'single-page'} onClick={() => setReadingMode('single-page')} />
               <SidebarOption icon={ArrowLeftRight} label="Fit Width" active={fitWidth} onClick={() => setFitWidth(!fitWidth)} />
-              <SidebarOption icon={RotateCcw} label="Reset Engine" onClick={() => {setFitWidth(true); setReadingMode('long-strip');}} />
             </div>
           </div>
         </div>
