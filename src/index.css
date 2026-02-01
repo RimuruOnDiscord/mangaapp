@@ -20,6 +20,79 @@
   --crunchy-purple: #9b59b6;
 }
 
+/* Add this inside your <style> tag */
+.reader-img {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: auto;
+  /* This helps prevent thin white lines between slices */
+  margin-top: -1px; 
+  /* Prevents the browser from smoothing out pixel art/screentones too much */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* If you want to try and hide those white side-bars on images automatically */
+.dark-mode-img {
+  filter: brightness(0.9) contrast(1.1);
+}
+
+/* Add/Update this in your style block */
+.gap-killer {
+  line-height: 0 !important;
+  font-size: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.manga-image {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  vertical-align: bottom !important;
+  /* Anti-aliasing fix for sub-pixel gaps */
+  transform: translateZ(0); 
+  border: none !important;
+}
+
+@keyframes slideDownFade {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stagger-1 { animation: slideDownFade 0.3s ease-out both 0.1s; }
+.stagger-2 { animation: slideDownFade 0.3s ease-out both 0.15s; }
+.stagger-3 { animation: slideDownFade 0.3s ease-out both 0.2s; }
+
+.filter-mask {
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+/* Hide system cursor aggressively */
+*, *::before, *::after {
+  cursor: none !important;
+}
+
+html, body, button, a, input, select, textarea, [role="button"], .cursor-pointer {
+  cursor: none !important;
+}
+
+/* Netflix-style protection */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  background-color: #050505;
+}
+
+/* Smooth cursor transition helper */
+.cursor-transition {
+  transition: width 0.3s ease-out, height 0.3s ease-out, background-color 0.3s ease-out, border-color 0.3s ease-out, opacity 0.3s ease-out;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
