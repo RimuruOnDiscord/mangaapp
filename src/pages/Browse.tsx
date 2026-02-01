@@ -55,50 +55,7 @@ const Logo: React.FC<{ className?: string }> = ({ className = "w-10 h-10" }) => 
   </div>
 );
 
-const CustomCursor = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isPointer, setIsPointer] = useState(false);
-  const [isClicking, setIsClicking] = useState(false);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-      const target = e.target as HTMLElement;
-      const clickable = target.tagName === 'BUTTON' || target.tagName === 'A' || 
-                        target.closest('button') || target.closest('a') ||
-                        window.getComputedStyle(target).cursor === 'pointer';
-      setIsPointer(!!clickable);
-    };
-    const handleMouseDown = () => setIsClicking(true);
-    const handleMouseUp = () => setIsClicking(false);
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, []);
-
-  return (
-    <div 
-      className="fixed top-0 left-0 pointer-events-none z-[9999] will-change-transform"
-      style={{ 
-        transform: `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%)`,
-        transition: 'transform 0.05s ease-out',
-      }}
-    >
-      <div className={`
-        rounded-full border border-white/40 backdrop-blur-[3px] transition-all duration-300
-        shadow-[0_0_20px_rgba(255,255,255,0.2)]
-        ${isPointer ? 'w-14 h-14 bg-white/10' : 'w-6 h-6 bg-white/5'}
-        ${isClicking ? 'scale-75 opacity-50' : 'scale-100 opacity-100'}
-      `} />
-    </div>
-  );
-};
 
 const CustomNavLink: React.FC<CustomNavLinkProps> = ({ icon: Icon, label, to }) => (
   <NavLink
@@ -275,7 +232,7 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-emerald-500/30">
       
-<CustomCursor />
+
 
       {/* HEADER */}
 <header className="sticky top-0 z-[100] w-full bg-[#050505]/90 backdrop-blur-xl border-b border-white/5">
