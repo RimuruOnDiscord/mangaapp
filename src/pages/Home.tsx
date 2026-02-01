@@ -474,7 +474,7 @@ const Home: React.FC = () => {
                  </div>
                  <h1 className="text-4xl md:text-7xl font-black mb-6 max-w-2xl leading-none uppercase italic tracking-tighter">Sakamoto Days</h1>
                  <div className="flex gap-4">
-                     <button onClick={() => navigate(`/read/${topManga[0].mal_id}`)} className="bg-white bg-opacity-10 backdrop-blur-sm border border-white/10 hover:bg-emerald-500 hover:bg-opacity-25 px-10 py-4 rounded-2xl font-bold transition-all shadow-xl">
+                     <button onClick={() => navigate(`/read/131334`)} className="bg-white bg-opacity-10 backdrop-blur-sm border border-white/10 hover:bg-emerald-500 hover:bg-opacity-25 px-10 py-4 rounded-2xl font-bold transition-all shadow-xl">
                       READ NOW
                     </button>
                  </div>
@@ -541,3 +541,4 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
